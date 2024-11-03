@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -11,9 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +27,12 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     TextView textView;
     FirebaseUser user;
+    private BookSearchService bookSearchService;
+    private EditText searchEditText;
+    private Button searchBtn;
+    private RecyclerView recyclerViewResults;
+    private BookAdapter bookAdapter;
+    private List<Book> bookList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        searchEditText = findViewById(R.id.searchEditText);
+        searchBtn = findViewById(R.id.searchBtn);
+        recyclerViewResults = findViewById(R.id.recyclerViewResults);
         auth = FirebaseAuth.getInstance();
         button = findViewById(R.id.logout);
         textView = findViewById(R.id.user_details);
@@ -52,5 +67,29 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+       //Config del recycler
+        recyclerViewResults.setLayoutManager(new LinearLayoutManager(this));
+        bookAdapter = new BookAdapter(bookList);
+        recyclerViewResults.setAdapter(bookAdapter);
+
+        bookSearchService = new BookSearchService();
+
+        searchBtn.setOnClickListener(v -> searchBooks());
+    }
+
+    private void searchBooks(){
+        //Input del user
+        String query = searchEditText.getText().toString();
+        bookSearchService.searchBooks(query,
+                books -> runOnUiThread(() -> {
+                    bookList.clear();
+                    //Agrego los libros a bookList
+                    bookList.addAll(books);
+                    bookAdapter.notifyDataSetChanged();
+                }),
+                e -> {
+                    e.printStackTrace();
+                }
+        );
     }
 }
