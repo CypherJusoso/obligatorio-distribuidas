@@ -1,12 +1,16 @@
 package com.example.obligatorioappsdistribuidas;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -31,6 +35,18 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         Book book = bookList.get(position);
         holder.titleTextView.setText(book.getTitle());
         holder.authorsTextView.setText(String.join(", ", book.getAuthors()));
+
+        /*Android Studio no permite conexiones http y por
+        alguna razón el link de la api me devuelve http
+        asi que lo cambio a https manualmente*/
+        String thumbnailUrl = book.getThumbnail().replace("http:", "https:");
+
+        //Uso de librería glide para cargar la imagen
+        Glide.with(holder.itemView.getContext())
+                .load(thumbnailUrl)
+                .placeholder(R.drawable.placeholder_image)
+                .error(R.drawable.error_image)
+                .into(holder.thumbnailImageView);
     }
     @Override
     public int getItemCount() {
@@ -39,11 +55,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     }
 
     public static class BookViewHolder extends RecyclerView.ViewHolder{
+        public ImageView thumbnailImageView;
         TextView titleTextView, authorsTextView;
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.titleTextView);
             authorsTextView = itemView.findViewById(R.id.authorsTextView);
+            thumbnailImageView = itemView.findViewById(R.id.thumbnailImageView);
         }
     }
 }
