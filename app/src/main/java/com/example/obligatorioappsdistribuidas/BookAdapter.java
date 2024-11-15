@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,6 +37,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.titleTextView.setText(book.getTitle());
         holder.authorsTextView.setText(String.join(", ", book.getAuthors()));
 
+        holder.addBookBtn.setOnClickListener(v -> {
+            BookRepository repository = new BookRepository(v.getContext());
+            repository.saveBook(book);
+        });
         /*Android Studio no permite conexiones http y por
         alguna razón el link de la api me devuelve http
         asi que lo cambio a https manualmente*/
@@ -57,11 +62,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     public static class BookViewHolder extends RecyclerView.ViewHolder{
         public ImageView thumbnailImageView;
         TextView titleTextView, authorsTextView;
+        Button addBookBtn;
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
             titleTextView = itemView.findViewById(R.id.titleTextView);
             authorsTextView = itemView.findViewById(R.id.authorsTextView);
             thumbnailImageView = itemView.findViewById(R.id.thumbnailImageView);
+            addBookBtn = itemView.findViewById(R.id.btn_add_book);
         }
     }
 }

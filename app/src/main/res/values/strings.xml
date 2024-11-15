@@ -10,4 +10,5 @@
     <string name="ingresa_el_nombre_de_un_libro">Ingresa el nombre de un libro</string>
     <string name="buscar">Buscar</string>
     <string name="user_details">User Details</string>
+    <string name="agregar">Agregar</string>
 </resources>
