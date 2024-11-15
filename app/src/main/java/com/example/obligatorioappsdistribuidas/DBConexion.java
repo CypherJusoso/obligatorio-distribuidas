@@ -47,23 +47,25 @@ public class DBConexion extends SQLiteOpenHelper {
         public static final String COLUMN_USER_ID = "userId";
         public static final String COLUMN_USERNAME = "username";
     }
+
     private static final String SQL_CREATE_USER_ENTRY =
             "CREATE TABLE " + UserEntry.TABLE_NAME + " (" +
                     UserEntry.COLUMN_USER_ID + " TEXT PRIMARY KEY," +
-                    UserEntry.COLUMN_USERNAME + "TEXT)";
+                    UserEntry.COLUMN_USERNAME + " TEXT)";
+
     public static class UserBooksEntry implements BaseColumns {
         public static final String TABLE_NAME = "UsersBooks";
         public static final String COLUMN_USER_ID = "userId";
         public static final String COLUMN_BOOK_ID = "bookId";
     }
+
     private static final String SQL_CREATE_USER_BOOKS_ENTRY =
             "CREATE TABLE " + UserBooksEntry.TABLE_NAME + " (" +
-                    UserBooksEntry.COLUMN_USER_ID + " TEXT PRIMARY KEY," +
-                    UserBooksEntry.COLUMN_BOOK_ID + "TEXT," +
-                    "PRIMARY KEY (" + UserBooksEntry.COLUMN_USER_ID + "," + UserBooksEntry.COLUMN_BOOK_ID + ")," +
-                    "FOREIGN KEY (" + UserBooksEntry.COLUMN_USER_ID + ") REFERENCES Users(" + UserEntry.COLUMN_USER_ID + ")," +
-                    "FOREIGN KEY (" + UserBooksEntry.COLUMN_BOOK_ID + ") REFERENCES " + FeedEntry.TABLE_NAME + "(ID))";
-
+                    UserBooksEntry.COLUMN_USER_ID + " TEXT," +
+                    UserBooksEntry.COLUMN_BOOK_ID + " TEXT," +
+                    "PRIMARY KEY (" + UserBooksEntry.COLUMN_USER_ID + ", " + UserBooksEntry.COLUMN_BOOK_ID + ")," +
+                    "FOREIGN KEY (" + UserBooksEntry.COLUMN_USER_ID + ") REFERENCES " + UserEntry.TABLE_NAME + "(" + UserEntry.COLUMN_USER_ID + ")," +
+                    "FOREIGN KEY (" + UserBooksEntry.COLUMN_BOOK_ID + ") REFERENCES " + FeedEntry.TABLE_NAME + "(" + FeedEntry.COLUMN_ID + "))";
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
     public DBConexion(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
