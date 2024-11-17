@@ -1,5 +1,6 @@
 package com.example.obligatorioappsdistribuidas;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
     Button button;
+    Button button_history;
     TextView textView;
     FirebaseUser user;
     private BookSearchService bookSearchService;
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private BookAdapter bookAdapter;
     private List<Book> bookList = new ArrayList<>();
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewResults = findViewById(R.id.recyclerViewResults);
         auth = FirebaseAuth.getInstance();
         button = findViewById(R.id.logout);
+        button_history = findViewById(R.id.ver_historial);
         textView = findViewById(R.id.user_details);
         user = auth.getCurrentUser();
         if(user == null){
@@ -65,6 +69,16 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        button_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SavedBooks.class);
+                startActivity(intent);
+                finish();
+
             }
         });
        //Config del recycler
