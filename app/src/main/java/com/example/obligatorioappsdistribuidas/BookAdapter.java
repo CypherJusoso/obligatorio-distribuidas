@@ -41,7 +41,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
         holder.addBookBtn.setOnClickListener(v -> {
             BookRepository repository = new BookRepository(v.getContext());
-            repository.saveBook(book, getUserId());
+            repository.saveBook(book, repository.getUserId());
         });
         /*Android Studio no permite conexiones http y por
         alguna razón el link de la api me devuelve http
@@ -59,21 +59,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     public int getItemCount() {
         return bookList.size();
 
-    }
-
-    private String getUserId(){
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser user = auth.getCurrentUser();
-        String userId = null;
-
-        if (user != null) {
-            userId = user.getUid();
-            Log.d("Firebase", "User ID: " + userId);
-        } else {
-            Log.d("Firebase", "No user is currently signed in.");
-        }
-
-        return userId;
     }
 
     public static class BookViewHolder extends RecyclerView.ViewHolder{

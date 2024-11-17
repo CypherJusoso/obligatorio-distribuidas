@@ -60,12 +60,12 @@ public class SavedBooks extends AppCompatActivity {
         });
 
     }
-
-
+    
     private void loadBooks (){
         BookAdapter bookAdapter;
         BookRepository repository = new BookRepository(this);
-        List<Book> bookList = repository.searchBookByUserId();
+        String userID = repository.getUserId();
+        List<Book> bookList = repository.searchBookByUserId(userID);
 
         //Config del recycler
         recyclerViewResults.setLayoutManager(new LinearLayoutManager(this));

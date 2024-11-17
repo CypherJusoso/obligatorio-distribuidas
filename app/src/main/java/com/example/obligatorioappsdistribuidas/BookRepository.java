@@ -5,6 +5,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -107,5 +111,20 @@ public class BookRepository {
         return listBooks;
 
 
+    }
+
+    public String getUserId(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+        String userId = null;
+
+        if (user != null) {
+            userId = user.getUid();
+            Log.d("Firebase", "User ID: " + userId);
+        } else {
+            Log.d("Firebase", "No user is currently signed in.");
+        }
+
+        return userId;
     }
 }
