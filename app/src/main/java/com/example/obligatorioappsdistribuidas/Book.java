@@ -17,6 +17,10 @@ public class Book {
     private String infoLink;
     private String buyLink;
 
+    public Book() {
+
+    }
+
     public String getTitle() {
         return title;
     }
