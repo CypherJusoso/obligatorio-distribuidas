@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,7 +21,7 @@ public class BookRepository {
         dbConexion = new DBConexion(context);
     }
 
-    public void saveBook(Book book, String userId){
+    /*public void saveBook(Book book, String userId){
         SQLiteDatabase db = dbConexion.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DBConexion.FeedEntry.COLUMN_ID, book.getId());
@@ -41,11 +42,46 @@ public class BookRepository {
         userBook.put(DBConexion.UserBooksEntry.COLUMN_USER_ID, userId);
         userBook.put(DBConexion.UserBooksEntry.COLUMN_BOOK_ID, book.getId());
 
-
-
         db.insert(DBConexion.FeedEntry.TABLE_NAME, null, values);
         db.close();
+    }*/
+    public String saveBook(Book book, String userId) {
+        SQLiteDatabase db = dbConexion.getWritableDatabase();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(DBConexion.FeedEntry.COLUMN_ID, book.getId());
+            values.put(DBConexion.FeedEntry.COLUMN_TITLE, book.getTitle());
+            values.put(DBConexion.FeedEntry.COLUMN_SUBTITLE, book.getSubtitle());
+            values.put(DBConexion.FeedEntry.COLUMN_AUTHORS, String.join(", ", book.getAuthors()));
+            values.put(DBConexion.FeedEntry.COLUMN_PUBLISHER, book.getPublisher());
+            values.put(DBConexion.FeedEntry.COLUMN_PUBLISHED_DATE, book.getPublishedDate());
+            values.put(DBConexion.FeedEntry.COLUMN_DESCRIPTION, book.getDescription());
+            values.put(DBConexion.FeedEntry.COLUMN_PAGE_COUNT, book.getPageCount());
+            values.put(DBConexion.FeedEntry.COLUMN_THUMBNAIL, book.getThumbnail());
+            values.put(DBConexion.FeedEntry.COLUMN_PREVIEW_LINK, book.getPreviewLink());
+            values.put(DBConexion.FeedEntry.COLUMN_INFO_LINK, book.getInfoLink());
+            values.put(DBConexion.FeedEntry.COLUMN_BUY_LINK, book.getBuyLink());
+
+            // Inserta el libro en la tabla principal
+            db.insertOrThrow(DBConexion.FeedEntry.TABLE_NAME, null, values);
+
+            ContentValues userBook = new ContentValues();
+            userBook.put(DBConexion.UserBooksEntry.COLUMN_USER_ID, userId);
+            userBook.put(DBConexion.UserBooksEntry.COLUMN_BOOK_ID, book.getId());
+
+            // Inserta la relación usuario-libro
+            db.insertOrThrow(DBConexion.UserBooksEntry.TABLE_NAME, null, userBook);
+
+            return null; // Null indica éxito
+        } catch (SQLiteException e) {
+            return e.getMessage(); // Devuelve el mensaje de error original
+        } finally {
+            db.close();
+        }
     }
+
+
+
 
     @SuppressLint("Range")
     private Book cursorToObject(Cursor cursor) {
@@ -78,9 +114,7 @@ public class BookRepository {
         return book;
     }
 
-
     public ArrayList<Book> searchBookByUserId (String userId){
-
 
         String query = "SELECT * FROM " + DBConexion.FeedEntry.TABLE_NAME +
                 " INNER JOIN " + DBConexion.UserBooksEntry.TABLE_NAME + " on " + DBConexion.FeedEntry.COLUMN_ID + " = " + DBConexion.UserBooksEntry.COLUMN_BOOK_ID +
@@ -109,7 +143,6 @@ public class BookRepository {
         }
 
         return listBooks;
-
 
     }
 

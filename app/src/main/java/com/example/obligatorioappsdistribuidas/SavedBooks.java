@@ -3,7 +3,6 @@ package com.example.obligatorioappsdistribuidas;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SavedBooks extends AppCompatActivity {
@@ -29,7 +27,7 @@ public class SavedBooks extends AppCompatActivity {
     FirebaseUser user;
     TextView textView;
     private RecyclerView recyclerViewResults;
-    private Button volver;
+    private Button btnVolver;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -44,7 +42,7 @@ public class SavedBooks extends AppCompatActivity {
         });
 
         button = findViewById(R.id.logoutButton);
-        volver = findViewById(R.id.button2);
+        btnVolver = findViewById(R.id.btnVolver);
         recyclerViewResults = findViewById(R.id.history_recycler_view);
         textView = findViewById(R.id.header);
         auth = FirebaseAuth.getInstance();
@@ -59,8 +57,17 @@ public class SavedBooks extends AppCompatActivity {
             }
         });
 
+        btnVolver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
-    
+
     private void loadBooks (){
         BookAdapter bookAdapter;
         BookRepository repository = new BookRepository(this);

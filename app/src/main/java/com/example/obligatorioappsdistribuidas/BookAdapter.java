@@ -1,5 +1,6 @@
 package com.example.obligatorioappsdistribuidas;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,7 +43,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
         holder.addBookBtn.setOnClickListener(v -> {
             BookRepository repository = new BookRepository(v.getContext());
-            repository.saveBook(book, repository.getUserId());
+            //repository.saveBook(book, repository.getUserId());
+            String errorMessage = repository.saveBook(book, repository.getUserId());
+
+            String message = (errorMessage == null) ? "Libro guardado exitosamente" : errorMessage;
+            Toast.makeText(v.getContext(), message, Toast.LENGTH_SHORT).show();
         });
         /*Android Studio no permite conexiones http y por
         alguna razón el link de la api me devuelve http
@@ -71,7 +77,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             authorsTextView = itemView.findViewById(R.id.authorsTextView);
             thumbnailImageView = itemView.findViewById(R.id.thumbnailImageView);
             addBookBtn = itemView.findViewById(R.id.btn_add_book);
+
+            }
         }
     }
-}
 
