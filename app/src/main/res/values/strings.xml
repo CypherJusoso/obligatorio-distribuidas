@@ -11,4 +11,11 @@
     <string name="buscar">Buscar</string>
     <string name="user_details">User Details</string>
     <string name="agregar">Agregar</string>
+    <string name="book_title">Book Title</string>
+    <string name="ver_detalles">Ver Detalles</string>
+    <string name="titulo">Titulo</string>
+    <string name="autor">Autor</string>
+    <string name="descripcion">Descripcion</string>
+    <string name="numero_de_pagina_actual">Numero de pagina actual</string>
+    <string name="salvar_numero_de_pagina">Salvar numero de pagina</string>
 </resources>

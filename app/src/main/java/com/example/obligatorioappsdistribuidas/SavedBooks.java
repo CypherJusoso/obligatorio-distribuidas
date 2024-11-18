@@ -3,6 +3,7 @@ package com.example.obligatorioappsdistribuidas;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -65,19 +66,20 @@ public class SavedBooks extends AppCompatActivity {
                 finish();
             }
         });
-
+        loadBooks();
     }
 
     private void loadBooks (){
-        BookAdapter bookAdapter;
+
         BookRepository repository = new BookRepository(this);
         String userID = repository.getUserId();
         List<Book> bookList = repository.searchBookByUserId(userID);
 
-        //Config del recycler
-        recyclerViewResults.setLayoutManager(new LinearLayoutManager(this));
-        bookAdapter = new BookAdapter(bookList);
-        recyclerViewResults.setAdapter(bookAdapter);
+        Log.d("LOAD_BOOKS", "Número de libros: " + bookList.size());
 
+        //Config del recycler
+        MyBookAdapter myBookAdapter = new MyBookAdapter(bookList);
+        recyclerViewResults.setAdapter(myBookAdapter);
+        recyclerViewResults.setLayoutManager(new LinearLayoutManager(this));
     }
 }

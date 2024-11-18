@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
 
 public class DBConexion extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "BooksDatabase.db";
     protected Context mContext;
 
@@ -57,12 +57,14 @@ public class DBConexion extends SQLiteOpenHelper {
         public static final String TABLE_NAME = "UsersBooks";
         public static final String COLUMN_USER_ID = "userId";
         public static final String COLUMN_BOOK_ID = "bookId";
+        public static final String COLUMN_PAGE_NUMBER = "pageNumber";
     }
 
     private static final String SQL_CREATE_USER_BOOKS_ENTRY =
             "CREATE TABLE " + UserBooksEntry.TABLE_NAME + " (" +
                     UserBooksEntry.COLUMN_USER_ID + " TEXT," +
                     UserBooksEntry.COLUMN_BOOK_ID + " TEXT," +
+                    UserBooksEntry.COLUMN_PAGE_NUMBER + " INTEGER," +
                     "PRIMARY KEY (" + UserBooksEntry.COLUMN_USER_ID + ", " + UserBooksEntry.COLUMN_BOOK_ID + ")," +
                     "FOREIGN KEY (" + UserBooksEntry.COLUMN_USER_ID + ") REFERENCES " + UserEntry.TABLE_NAME + "(" + UserEntry.COLUMN_USER_ID + ")," +
                     "FOREIGN KEY (" + UserBooksEntry.COLUMN_BOOK_ID + ") REFERENCES " + FeedEntry.TABLE_NAME + "(" + FeedEntry.COLUMN_ID + "))";
@@ -72,12 +74,17 @@ public class DBConexion extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(SQL_CREATE_USER_ENTRY);
+        db.execSQL(SQL_CREATE_USER_BOOKS_ENTRY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SQL_DELETE_ENTRIES);
+        db.execSQL("DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + UserEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + UserBooksEntry.TABLE_NAME);
         onCreate(db);
     }
 }

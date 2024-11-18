@@ -48,6 +48,7 @@ public class BookRepository {
     public String saveBook(Book book, String userId) {
         SQLiteDatabase db = dbConexion.getWritableDatabase();
         try {
+
             ContentValues values = new ContentValues();
             values.put(DBConexion.FeedEntry.COLUMN_ID, book.getId());
             values.put(DBConexion.FeedEntry.COLUMN_TITLE, book.getTitle());
@@ -63,14 +64,15 @@ public class BookRepository {
             values.put(DBConexion.FeedEntry.COLUMN_BUY_LINK, book.getBuyLink());
 
             // Inserta el libro en la tabla principal
-            db.insertOrThrow(DBConexion.FeedEntry.TABLE_NAME, null, values);
+             db.insertOrThrow(DBConexion.FeedEntry.TABLE_NAME, null, values);
 
             ContentValues userBook = new ContentValues();
             userBook.put(DBConexion.UserBooksEntry.COLUMN_USER_ID, userId);
             userBook.put(DBConexion.UserBooksEntry.COLUMN_BOOK_ID, book.getId());
+            Log.d("BookRepository", "User ID: " + userId + ", Book ID: " + book.getId());
 
             // Inserta la relación usuario-libro
-            db.insertOrThrow(DBConexion.UserBooksEntry.TABLE_NAME, null, userBook);
+             db.insertOrThrow(DBConexion.UserBooksEntry.TABLE_NAME, null, userBook);
 
             return null; // Null indica éxito
         } catch (SQLiteException e) {
@@ -87,7 +89,7 @@ public class BookRepository {
     private Book cursorToObject(Cursor cursor) {
         Book book = new Book();
         book.setId(
-                String.valueOf(cursor.getInt(cursor.getColumnIndex(DBConexion.FeedEntry.COLUMN_ID))));
+                cursor.getString(cursor.getColumnIndex(DBConexion.FeedEntry.COLUMN_ID)));
         book.setTitle(
                 cursor.getString(cursor.getColumnIndex(DBConexion.FeedEntry.COLUMN_TITLE)));
         book.setAuthors(
@@ -116,16 +118,18 @@ public class BookRepository {
 
     public ArrayList<Book> searchBookByUserId (String userId){
 
+        //Había un error en la syntaxis de esta consulta, hacía que no se mostraran los libros en el historial
         String query = "SELECT * FROM " + DBConexion.FeedEntry.TABLE_NAME +
                 " INNER JOIN " + DBConexion.UserBooksEntry.TABLE_NAME + " on " + DBConexion.FeedEntry.COLUMN_ID + " = " + DBConexion.UserBooksEntry.COLUMN_BOOK_ID +
-                " WHERE " + DBConexion.UserBooksEntry.COLUMN_USER_ID + " = " + userId;
+                " WHERE " + DBConexion.UserBooksEntry.COLUMN_USER_ID + " = '" + userId + "'";
 
         ArrayList<Book> listBooks = new ArrayList<Book>();
         SQLiteDatabase db = dbConexion.getReadableDatabase();
         Cursor cursor = null;
         try{
 
-            cursor = db.rawQuery(query, new String[]{userId});
+            //Antes habían argumentos en este cursor, eso provocaba un error con la consulta que ya tenía argumentos.
+            cursor = db.rawQuery(query, null);
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     // Convertir cada registro en un objeto Book
@@ -143,6 +147,46 @@ public class BookRepository {
         }
 
         return listBooks;
+
+    }
+
+    public Book getBookById(String bookId){
+        String query = "SELECT * FROM " + DBConexion.FeedEntry.TABLE_NAME +
+                " WHERE " + DBConexion.FeedEntry.COLUMN_ID + " = ?";
+        Book book = null;
+        SQLiteDatabase db = dbConexion.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query,new String[]{bookId});
+        if(cursor!=null && cursor.moveToFirst()){
+            book = cursorToObject(cursor);
+        }
+        if(cursor!=null){
+            cursor.close();
+        }
+        db.close();
+        return book;
+    }
+
+    public void savePageNumber(String userId, String bookId, int pageNumber){
+        SQLiteDatabase db = dbConexion.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(DBConexion.UserBooksEntry.COLUMN_PAGE_NUMBER, pageNumber);
+        String selection = DBConexion.UserBooksEntry.COLUMN_USER_ID + " = ? AND " +
+                DBConexion.UserBooksEntry.COLUMN_BOOK_ID + " = ?";
+        String[] selectionArgs = { userId, bookId };
+
+        int count = db.update(
+                DBConexion.UserBooksEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs
+        );
+
+        if(count == 0){
+            values.put(DBConexion.UserBooksEntry.COLUMN_USER_ID, userId);
+            values.put(DBConexion.UserBooksEntry.COLUMN_BOOK_ID, bookId);
+            db.insert(DBConexion.UserBooksEntry.TABLE_NAME, null, values);
+        }
 
     }
 

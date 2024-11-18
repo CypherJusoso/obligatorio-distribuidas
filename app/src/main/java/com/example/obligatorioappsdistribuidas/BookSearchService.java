@@ -1,5 +1,7 @@
 package com.example.obligatorioappsdistribuidas;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,7 +38,9 @@ public class BookSearchService {
             try {
                 //Se construye la url con la consulta del usuario
                 String urlString = GOOGLE_BOOKS_API_URL + query.replace(" ", "+");
+                Log.d("BookSearchService", "URL: " + urlString);  // Imprimir URL en Logcat
                 URL url = new URL(urlString);
+
 
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
@@ -80,7 +84,7 @@ public class BookSearchService {
                 JSONObject volumeInfo = bookJson.getJSONObject("volumeInfo");
 
                 //Consigo los datos que necesito
-                String id = volumeInfo.optString("id", "No hay id");
+                String id = bookJson.optString("id", "No hay id"); //El id estaba dentro de bookJson,esto provocaba el error de la id
                 String title = volumeInfo.optString("title", "No hay titulo");
                 String subtitle = volumeInfo.optString("subtitle", "No hay subtitle");
 

@@ -42,6 +42,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.authorsTextView.setText(String.join(", ", book.getAuthors()));
 
         holder.addBookBtn.setOnClickListener(v -> {
+
+            Log.d("BookAdapter", "Book ID to be saved: " + book.getId());
+
             BookRepository repository = new BookRepository(v.getContext());
             //repository.saveBook(book, repository.getUserId());
             String errorMessage = repository.saveBook(book, repository.getUserId());
