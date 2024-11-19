@@ -30,7 +30,6 @@ public class SavedBooks extends AppCompatActivity {
     private RecyclerView recyclerViewResults;
     private Button btnVolver;
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +68,7 @@ public class SavedBooks extends AppCompatActivity {
         loadBooks();
     }
 
+    //Metodo para cargar los libros
     private void loadBooks (){
 
         BookRepository repository = new BookRepository(this);
@@ -77,9 +77,10 @@ public class SavedBooks extends AppCompatActivity {
 
         Log.d("LOAD_BOOKS", "Número de libros: " + bookList.size());
 
+        LinearLayoutManager horizontalLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewResults.setLayoutManager(horizontalLayoutManager);
         //Config del recycler
         MyBookAdapter myBookAdapter = new MyBookAdapter(bookList);
         recyclerViewResults.setAdapter(myBookAdapter);
-        recyclerViewResults.setLayoutManager(new LinearLayoutManager(this));
     }
 }

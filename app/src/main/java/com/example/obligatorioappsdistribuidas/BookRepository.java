@@ -187,6 +187,27 @@ public class BookRepository {
             values.put(DBConexion.UserBooksEntry.COLUMN_BOOK_ID, bookId);
             db.insert(DBConexion.UserBooksEntry.TABLE_NAME, null, values);
         }
+        db.close();
+
+    }
+
+    public int getCurrentPageForUser(String bookId, String userId){
+        SQLiteDatabase db = dbConexion.getReadableDatabase();
+        Cursor cursor = db.query(
+                DBConexion.UserBooksEntry.TABLE_NAME,
+                new String[]{DBConexion.UserBooksEntry.COLUMN_PAGE_NUMBER},
+                DBConexion.UserBooksEntry.COLUMN_USER_ID + " = ? AND " + DBConexion.UserBooksEntry.COLUMN_BOOK_ID + " = ?",
+                new String[]{userId, bookId},
+                null, null, null);
+
+        if(cursor != null && cursor.moveToFirst()){
+            int currentPage = cursor.getInt(cursor.getColumnIndexOrThrow(DBConexion.UserBooksEntry.COLUMN_PAGE_NUMBER));
+            cursor.close();
+            return currentPage;
+        }else{
+            //Si no existe una current page te devuelve 1
+            return 1;
+        }
 
     }
 
@@ -204,4 +225,21 @@ public class BookRepository {
 
         return userId;
     }
+
+    public void deleteBookById(String bookId) {
+        SQLiteDatabase db = dbConexion.getWritableDatabase();
+        db.beginTransaction();
+        try{
+            db.delete(DBConexion.UserBooksEntry.TABLE_NAME, DBConexion.UserBooksEntry.COLUMN_BOOK_ID + " = ?", new String[]{bookId});
+            db.delete(DBConexion.FeedEntry.TABLE_NAME, DBConexion.FeedEntry.COLUMN_ID + " = ?", new String[]{bookId});
+
+            db.setTransactionSuccessful();
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            db.endTransaction();
+        }
+        db.close();
+    }
+
 }

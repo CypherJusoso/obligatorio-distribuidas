@@ -18,4 +18,22 @@
     <string name="descripcion">Descripcion</string>
     <string name="numero_de_pagina_actual">Numero de pagina actual</string>
     <string name="salvar_numero_de_pagina">Salvar numero de pagina</string>
+    <string name="subtitulo">Subtitulo</string>
+    <string name="editorial">Editorial</string>
+    <string name="fecha_de_publicacion">Fecha de publicacion</string>
+    <string name="cantidad_de_paginas">Cantidad de paginas</string>
+    <string name="volver">Volver</string>
+    <string name="book_publisher">Editorial: %1$s</string>
+    <string name="book_published_date">Fecha de Lanzamiento: %1$s</string>
+    <string name="book_page_count">Numero de Paginas: %1$d</string>
+    <string name="pagina_actual">Pagina actual:</string>
+    <string name="pagina_actual_2">Pagina actual : %1$d</string>
+    <string name="eliminar_libro">Eliminar Libro</string>
+    <string name="libro_activo">Libro Activo</string>
+    <string name="mis_libros">Mis Libros</string>
+    <string name="ultimo_libro_leido">Ultimo Libro Leido</string>
+    <string name="titulo_del_libro_activo">Titulo del Libro Activo</string>
+    <string name="book_author">Autor/es:  %1$s</string>
+    <string name="imagen_del_libro_activo">Imagen del libro activo</string>
+
 </resources>

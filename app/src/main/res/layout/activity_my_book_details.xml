@@ -25,16 +25,53 @@
             android:textSize="18sp"/>
 
         <TextView
+            android:id="@+id/bookSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subtitulo"
+            android:textSize="18sp"/>
+
+        <TextView
             android:id="@+id/bookAuthor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/autor"/>
+            android:text="@string/autor"
+            android:textSize="18sp"/>
+        />
+
+        <TextView
+            android:id="@+id/bookPublisher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/editorial"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/bookPublishedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fecha_de_publicacion"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/bookPageCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cantidad_de_paginas"
+            android:textSize="18sp"/>
+
+
 
         <TextView
             android:id="@+id/bookDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/descripcion"/>
+        <TextView
+            android:id="@+id/currentPageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pagina_actual"/>
 
         <EditText
             android:id="@+id/pageNumberInput"
@@ -47,6 +84,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/salvar_numero_de_pagina"/>
+        <Button
+            android:id="@+id/deleteBookButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/eliminar_libro"
+            android:layout_marginTop="16dp"/>
+        <Button
+            android:id="@+id/volverBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/volver"/>
 
     </LinearLayout>
 
