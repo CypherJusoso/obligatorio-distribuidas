@@ -2,10 +2,12 @@ package com.example.obligatorioappsdistribuidas;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,16 +21,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class SavedBooks extends AppCompatActivity {
 
     FirebaseAuth auth;
-    Button button;
+    Button button, btnVolver, viewActiveBookDetailsButton;
     FirebaseUser user;
-    TextView textView;
+    TextView textView, activeBookTitle;
     private RecyclerView recyclerViewResults;
-    private Button btnVolver;
+    private ImageView activeBookImage;
+
+    private String idBookActive;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +47,30 @@ public class SavedBooks extends AppCompatActivity {
             return insets;
         });
 
+        activeBookImage = findViewById(R.id.activeBookImage);
+        activeBookTitle = findViewById(R.id.activeBookTitle);
+        viewActiveBookDetailsButton = findViewById(R.id.viewActiveBookDetailsButton);
+
         button = findViewById(R.id.logoutButton);
         btnVolver = findViewById(R.id.btnVolver);
         recyclerViewResults = findViewById(R.id.history_recycler_view);
         textView = findViewById(R.id.header);
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+
+        viewActiveBookDetailsButton.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(getApplicationContext(), MyBookDetails.class);
+                    intent.putExtra("book_id", idBookActive);
+                    startActivity(intent);
+                } catch (Exception ex) {
+
+                }
+            }
+        }));
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +90,7 @@ public class SavedBooks extends AppCompatActivity {
             }
         });
         loadBooks();
+        loadActiveBook();
     }
 
     //Metodo para cargar los libros
@@ -83,4 +108,37 @@ public class SavedBooks extends AppCompatActivity {
         MyBookAdapter myBookAdapter = new MyBookAdapter(bookList);
         recyclerViewResults.setAdapter(myBookAdapter);
     }
+
+    private void loadActiveBook () {
+
+            SharedPreferences sharedPref = getSharedPreferences("libroActivo", MODE_PRIVATE);
+            String tituloBook = sharedPref.getString("tituloBook","");
+            String imageBook = sharedPref.getString("imageBook","");
+            idBookActive = sharedPref.getString("IdBook","");
+        if (!tituloBook.isEmpty()) {
+            activeBookTitle.setText(tituloBook);
+            activeBookTitle.setVisibility(View.VISIBLE);
+        } else {
+            activeBookTitle.setVisibility(View.INVISIBLE);
+        }
+
+        if (!imageBook.isEmpty()) {
+            String imageBookStr = imageBook.replace("http:", "https:");
+            Glide.with(this)
+                    .load(imageBookStr)
+                    .placeholder(R.drawable.placeholder_image)
+                    .error(R.drawable.error_image)
+                    .into(activeBookImage);
+            activeBookImage.setVisibility(View.VISIBLE);
+        } else {
+            activeBookImage.setVisibility(View.INVISIBLE);
+        }
+
+        if (!idBookActive.isEmpty()) {
+            viewActiveBookDetailsButton.setVisibility(View.VISIBLE);
+        } else {
+            viewActiveBookDetailsButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
 }

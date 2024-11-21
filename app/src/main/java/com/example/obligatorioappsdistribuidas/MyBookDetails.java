@@ -1,6 +1,8 @@
 package com.example.obligatorioappsdistribuidas;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -77,6 +79,14 @@ public class MyBookDetails extends AppCompatActivity {
             }else{
                 Toast.makeText(this, "Por favor, ingrese un número de página", Toast.LENGTH_SHORT).show();
             }
+
+            SharedPreferences sharedPref = getSharedPreferences("libroActivo",MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            editor.putString("tituloBook",book.getTitle());
+            editor.putString("imageBook",book.getThumbnail());
+            editor.putString("IdBook",book.getId());
+            editor.apply();
         });
 
         deleteBookButton.setOnClickListener(v -> {
@@ -84,7 +94,7 @@ public class MyBookDetails extends AppCompatActivity {
         });
 
         volverButton.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), SavedBooks.class);
             startActivity(intent);
             finish();
         });
@@ -124,6 +134,11 @@ public class MyBookDetails extends AppCompatActivity {
     private void deleteBook (String bookId){
         BookRepository repository = new BookRepository(this);
         repository.deleteBookById(bookId);
+
+        SharedPreferences sharedPref = getSharedPreferences("libroActivo", MODE_PRIVATE);
+        SharedPreferences.Editor delistBook = sharedPref.edit();
+        delistBook.clear();
+        delistBook.apply();
 
         Toast.makeText(this, "Libro eliminado exitosamente", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this,SavedBooks.class);

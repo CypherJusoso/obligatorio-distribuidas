@@ -1,87 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/savedbooks"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:backgroundTint="#FF5722">
 
-    <!-- LinearLayout para el libro activo -->
-
-    <LinearLayout
-        android:id="@+id/activeBookLayout"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+    <!-- Imagen del libro activo -->
+    <ImageView
+        android:id="@+id/activeBookImage"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@string/imagen_del_libro_activo"
+        android:src="@drawable/placeholder_image"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/activeBookTitle"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/activeBookImage"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/placeholder_image"
-            android:contentDescription="@string/imagen_del_libro_activo" />
+    <!-- Título del libro activo -->
+    <TextView
+        android:id="@+id/activeBookTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/titulo_del_libro_activo"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/viewActiveBookDetailsButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activeBookImage" />
 
-        <TextView
-            android:id="@+id/activeBookTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/titulo_del_libro_activo"
-            android:textSize="18sp" />
+    <!-- Botón para ver detalles -->
+    <Button
+        android:id="@+id/viewActiveBookDetailsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="#6200EE"
+        android:text="@string/ver_detalles"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/header"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activeBookTitle" />
 
-        <Button
-            android:id="@+id/viewActiveBookDetailsButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/ver_detalles"
-            android:textColor="#FFFFFF"
-            android:background="#6200EE"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp" />
-    </LinearLayout>
+    <!-- Encabezado -->
 
+    <!-- RecyclerView para mostrar el historial de libros -->
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:text="@string/mis_libros"
-        app:layout_constraintTop_toBottomOf="@+id/activeBookLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/logout"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnVolver" />
+        app:layout_constraintTop_toBottomOf="@id/viewActiveBookDetailsButton" />
 
-    <Button
-        android:id="@+id/btnVolver"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/volver"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/history_recycler_view" />
-
-
-    <!-- RecyclerView para mostrar el historial de libros -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/history_recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnVolver"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnVolver"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintVertical_bias="0.485" />
+
+    <!-- Botón "Volver" -->
+
+    <!-- Botón "Logout" -->
+
+    <Button
+        android:id="@+id/btnVolver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="84dp"
+        android:text="@string/volver"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/logoutButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="84dp"
+        android:text="@string/logout"
+        android:textColorLink="#FF5722"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnVolver" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
